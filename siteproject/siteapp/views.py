@@ -4,8 +4,11 @@ from django.shortcuts import render
 def home(request):
     return render (request, 'home.html')
 
-def nav(request):
+def navbar(request):
     return render (request, 'navbar.html' )
 
 def base(request):
     return render (request, 'base.html')
+
+def footer(request):
+    return render (request, 'footer.html')
