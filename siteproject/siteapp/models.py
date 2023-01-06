@@ -23,3 +23,25 @@ training_set = dataset_train.iloc[:,1:2].values
 
 print(training_set)
 print(training_set.shape)
+
+#normalizing the dataset
+scaler = MinMaxScaler(feature_range = (0,1))
+scaled_training_set = scaler.fit_transform(training_set)
+
+scaled_training_set
+
+#adding an x and y traains data structures
+
+x_train =[]
+y_train = []
+
+for i in range(60, 1200):
+    x_train.append(scaled_training_set[i-60:i, 0])
+    y_train.append(scaled_training_set[i, 0])
+
+x_train = np.array(x_train)
+y_train =np.array(y_train)
+
+print(x_train.shape)
+print(y_train)
+
