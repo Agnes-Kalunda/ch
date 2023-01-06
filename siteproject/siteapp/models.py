@@ -45,3 +45,6 @@ y_train =np.array(y_train)
 print(x_train.shape)
 print(y_train)
 
+#reshaping the data
+x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
+x_train.shape
