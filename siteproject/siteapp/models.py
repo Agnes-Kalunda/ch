@@ -1,5 +1,5 @@
 from django.db import models
-import plotly
+import plotly as plt
 import json
 import os
 from django.http import HttpResponse, JsonResponse
@@ -68,3 +68,36 @@ regressor.add(LSTM(units= 50))
 regressor.add(Dropout(0.2))
 
 regressor.add(Dense(units=1))
+
+#fitting the model
+
+regressor.compile(optimizer = 'Adam', loss = 'mean_squared_error')
+regressor.fit(x_train, y_train, epochs=100, batch_size=32)
+
+
+#preparing the model input
+dataset_total = pd.concat((dataset_train['Open'], dataset_test['Open']), axis =0)
+inputs = dataset_total[len(dataset_total)- len(dataset_test)-60:].values
+
+inputs = inputs.reshape(-1,1)
+inputs = scaler.transform(inputs)
+
+x_test = []
+for i in range(60,80):
+    x_test.append(inputs[i-60:i,0])
+x_test = np.array(x_test)
+x_test= np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
+
+#predicting the january 2023 stock prices
+
+predicted_stock_price = regressor.predict(x_test)
+predicted_stock_price= scaler.inverse_transform(predicted_stock_price)
+
+#ploting the data
+
+plt.plot(actual_stock_price, color='red', label = 'Actual Google Stock Prices')
+plt.plot(predicted_stock_price, color ='blue', label = 'Predicted_Stock_Prices')
+plt.title('Google Stock Price Prediction')
+plt.xlabel('Time')
+plt.ylabel('Stock prices')
+plt.legend()
